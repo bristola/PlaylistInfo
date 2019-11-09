@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
 
 @Component({
@@ -6,16 +6,14 @@ import { SpotifyService } from 'src/app/services/spotify.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-
-  uri: string;
+export class HomeComponent {
 
   constructor(private _spotifyService: SpotifyService) { }
 
-  ngOnInit() {
-    this._spotifyService.getURI().subscribe(uri => {
-      this.uri = uri;
-    })
+  signin(): void {
+    this._spotifyService.getSigninURI().subscribe(uri => {
+      window.location.href = uri;
+    });
   }
 
 }

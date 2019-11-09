@@ -12,7 +12,7 @@ export class SpotifyService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  getURI(): Observable<string> {
+  getSigninURI(): Observable<string> {
     return this._httpClient.get(`${this.API_URL}/signinuri`, {responseType: 'text'});
   }
 }
