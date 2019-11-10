@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     SigninComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule

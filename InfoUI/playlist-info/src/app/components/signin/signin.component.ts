@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SpotifyService } from 'src/app/services/spotify.service';
 
 @Component({
   selector: 'app-signin',
@@ -8,12 +9,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private _router: Router, private _route: ActivatedRoute) { }
+  constructor(private _router: Router,
+              private _route: ActivatedRoute,
+              private _spotifyService: SpotifyService) { }
 
   ngOnInit() {
     this._route.queryParams.subscribe(params => {
       const code = params['code'];
-      sessionStorage.setItem('code', code);
+      this._spotifyService.setCode(code);
       this._router.navigate(['/playlists']);
     });
   }
