@@ -19,6 +19,7 @@ import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import constants.Constants;
+import domain.AuthorizeResponse;
 
 @Service
 public class SpotifyService {
@@ -58,9 +59,24 @@ public class SpotifyService {
 
     }
 
-    public PlaylistSimplified[] getUserPlaylists(String code) throws IOException, SpotifyWebApiException {
+    public AuthorizeResponse authorizeUser(String code) throws IOException, SpotifyWebApiException {
 
-        String userID = this.authorizeApi(code);
+        AuthorizationCodeRequest authorizationCodeRequest = this.api.authorizationCode(code.trim())
+            .build();
+
+        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+
+        String accessToken = authorizationCodeCredentials.getAccessToken();
+        String refreshToken = authorizationCodeCredentials.getRefreshToken();
+
+        AuthorizeResponse response = new AuthorizeResponse(accessToken, refreshToken);
+
+        return response;
+    }
+
+    public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+
+        String userID = this.getUser(accessToken, refreshToken);
 
         GetListOfUsersPlaylistsRequest getListOfUsersPlaylistsRequest = this.api
             .getListOfUsersPlaylists(userID)
@@ -76,22 +92,17 @@ public class SpotifyService {
 
    }
 
-   private String authorizeApi(String code) throws IOException, SpotifyWebApiException {
+   private String getUser(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
 
-       AuthorizationCodeRequest authorizationCodeRequest = this.api.authorizationCode(code.trim())
-            .build();
+       this.api.setAccessToken(accessToken);
+       this.api.setRefreshToken(refreshToken);
 
-        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+       GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = this.api.getCurrentUsersProfile()
+           .build();
 
-        this.api.setAccessToken(authorizationCodeCredentials.getAccessToken());
-        this.api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+       User user = getCurrentUsersProfileRequest.execute();
 
-        GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = this.api.getCurrentUsersProfile()
-            .build();
-
-        User user = getCurrentUsersProfileRequest.execute();
-
-        return user.getId();
+       return user.getId();
    }
 
 }

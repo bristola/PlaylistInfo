@@ -16,16 +16,16 @@ export class SpotifyService {
     return this._httpClient.get(`${this.API_URL}/signinuri`, {responseType: 'text'});
   }
 
-  getUserPlaylists(code: string): Observable<any> {
-    const headers = new HttpHeaders({'SPOTIFY-AUTH-CODE': code});
+  getUserPlaylists(accessToken: string, refreshToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'SPOTIFY-ACCESS-TOKEN': accessToken,
+      'SPOTIFY-REFRESH-TOKEN': refreshToken
+    });
     return this._httpClient.get(`${this.API_URL}/playlists`, {headers: headers});
   }
 
-  setCode(code: string): void {
-    sessionStorage.setItem('code', code);
-  }
-
-  getCode(): string {
-    return sessionStorage.getItem('code');
+  authorize(code: string): Observable<any> {
+    const headers = new HttpHeaders({'SPOTIFY-AUTH-CODE': code});
+    return this._httpClient.get(`${this.API_URL}/authorize`, {headers: headers});
   }
 }

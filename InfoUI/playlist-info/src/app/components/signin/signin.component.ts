@@ -16,7 +16,10 @@ export class SigninComponent implements OnInit {
   ngOnInit() {
     this._route.queryParams.subscribe(params => {
       const code = params['code'];
-      this._spotifyService.setCode(code);
+      this._spotifyService.authorize(code).subscribe(data => {
+        sessionStorage.setItem("access", data.accessToken);
+        sessionStorage.setItem("refresh", data.refreshToken);
+      });
       this._router.navigate(['/playlists']);
     });
   }

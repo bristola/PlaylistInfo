@@ -1,0 +1,27 @@
+.playlist-container {
+    display: flex;
+    align-self: center;
+    text-align: center;
+    justify-content: center;
+    min-width: 500px;
+}
+
+p {
+    width: 500px;
+}
+
+mat-card {
+    padding-top: 35px;
+    padding-bottom: 50px;
+}
+
+button {
+    margin-bottom: 25px;
+    background-color: #33779e;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: medium;
+}

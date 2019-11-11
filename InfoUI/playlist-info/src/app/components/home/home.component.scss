@@ -1,13 +1,22 @@
 .home-container {
     display: flex;
     align-self: center;
-    flex-direction: column;
     text-align: center;
+    justify-content: center;
+    min-width: 500px;
 }
 
+p {
+    width: 500px;
+}
+
+mat-card {
+    padding-top: 35px;
+    padding-bottom: 50px;
+}
 
 button {
-    margin: 25px;
+    margin-bottom: 25px;
     background-color: #33779e;
     color: white;
     padding-top: 5px;

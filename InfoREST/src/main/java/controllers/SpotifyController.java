@@ -13,6 +13,7 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import services.SpotifyService;
 import constants.Constants;
+import domain.AuthorizeResponse;
 
 @RestController
 public class SpotifyController {
@@ -25,9 +26,15 @@ public class SpotifyController {
         return _spotifyService.getSigninUri();
     }
 
+    @GetMapping(value = "/authorize")
+    public AuthorizeResponse authorizeUser(@RequestHeader(Constants.CODE_HEADER) String code) throws IOException, SpotifyWebApiException {
+        return _spotifyService.authorizeUser(code);
+    }
+
     @GetMapping(value = "/playlists")
-    public PlaylistSimplified[] getPlaylists(@RequestHeader(Constants.CODE_HEADER) String code) throws IOException, SpotifyWebApiException{
-        return _spotifyService.getUserPlaylists(code);
+    public PlaylistSimplified[] getPlaylists(@RequestHeader(Constants.ACCESS_HEADER) String accessToken,
+                                             @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
+        return _spotifyService.getUserPlaylists(accessToken, refreshToken);
     }
 
 }

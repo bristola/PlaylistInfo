@@ -15,8 +15,9 @@ export class PlaylistsComponent implements OnInit {
   constructor(private _spotifyService: SpotifyService) { }
 
   ngOnInit() {
-    this.code = this._spotifyService.getCode();
-    this.$playlists = this._spotifyService.getUserPlaylists(this.code);
+    const accessToken = sessionStorage.getItem('access');
+    const refreshToken = sessionStorage.getItem('refresh');
+    this.$playlists = this._spotifyService.getUserPlaylists(accessToken, refreshToken);
   }
 
 }
