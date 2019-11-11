@@ -5,30 +5,35 @@
     justify-content: center;
     min-width: 500px;
     margin-bottom: 50px;
-}
 
-p {
-    width: 500px;
-}
+    mat-card {
+        width: 500px;
+        min-width: 200px;
+        padding-top: 35px;
+        padding-bottom: 50px;
+        margin-bottom: 50px;
+    
+        img {
+            width: 33%;
+            margin-top: 5px;
+        }
 
-mat-card {
-    width: 500px;
-    min-width: 200px;
-    padding-top: 35px;
-    padding-bottom: 50px;
-    margin-bottom: 50px;
+        .info-button {
+            background-color: #33779e;
+            color: white;
+        }
+        
+        .spotify-button {
+            background-color: #1DB954;
+            color: white;
+        }
 
-    img {
-        width: 33%;
+        mat-action-row {
+            margin-top: 20px;
+        }
     }
-}
 
-.info-button {
-    background-color: #33779e;
-    color: white;
-}
-
-.spotify-button {
-    background-color: #1DB954;
-    color: white;
+    ::ng-deep .mat-spinner circle {
+        stroke: white;
+    }
 }
