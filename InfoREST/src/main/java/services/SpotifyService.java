@@ -11,7 +11,7 @@ import com.wrapper.spotify.requests.authorization.authorization_code.Authorizati
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
-import com.wrapper.spotify.requests.data.playlists.GetListOfUsersPlaylistsRequest;
+import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 import com.wrapper.spotify.model_objects.specification.User;
@@ -74,13 +74,14 @@ public class SpotifyService {
         return response;
     }
 
-    public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+    public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
 
         String userID = this.getUser(accessToken, refreshToken);
 
-        GetListOfUsersPlaylistsRequest getListOfUsersPlaylistsRequest = this.api
-            .getListOfUsersPlaylists(userID)
-            .offset(0)
+        GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = this.api
+            .getListOfCurrentUsersPlaylists()
+            .limit(Constants.PLAYLIST_NUM)
+            .offset(Constants.PLAYLIST_NUM * page)
             .build();
 
         // Execute request

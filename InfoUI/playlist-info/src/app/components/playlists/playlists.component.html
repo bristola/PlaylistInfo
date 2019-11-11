@@ -1,5 +1,5 @@
 <div class="playlist-container">
-    <mat-card *ngIf="$playlists | async as playlists; else loading">
+    <mat-card *ngIf="playlists.length > 0; else loading">
         <mat-card-header>
             <mat-card-title>Your Playlists</mat-card-title>
         </mat-card-header>
@@ -28,7 +28,17 @@
                     </ng-template>
                 </mat-expansion-panel>
             </mat-accordion>
+            <button mat-button
+                    *ngIf="loadMoreFlag"
+                    class="load-more"
+                    (click)="loadMore()">
+                Load More
+                <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
         </mat-card-content>
+        <mat-card-footer>
+            Total Playlists: {{playlists.length}}
+        </mat-card-footer>
     </mat-card>
     <ng-template #loading>
         <mat-spinner color="white"></mat-spinner>

@@ -16,12 +16,12 @@ export class SpotifyService {
     return this._httpClient.get(`${this.API_URL}/signinuri`, {responseType: 'text'});
   }
 
-  getUserPlaylists(accessToken: string, refreshToken: string): Observable<any> {
+  getUserPlaylists(accessToken: string, refreshToken: string, page): Observable<any> {
     const headers = new HttpHeaders({
       'SPOTIFY-ACCESS-TOKEN': accessToken,
       'SPOTIFY-REFRESH-TOKEN': refreshToken
     });
-    return this._httpClient.get(`${this.API_URL}/playlists`, {headers: headers});
+    return this._httpClient.get(`${this.API_URL}/playlists/${page}`, {headers: headers});
   }
 
   authorize(code: string): Observable<any> {

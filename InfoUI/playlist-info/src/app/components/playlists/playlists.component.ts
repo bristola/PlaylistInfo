@@ -11,18 +11,40 @@ import { Router } from '@angular/router';
 export class PlaylistsComponent implements OnInit {
 
   code: string;
-  $playlists: Observable<any>;
+  playlists = [];
+  accessToken: string;
+  refreshToken: string;
+  page: number = 0;
+  perPage: number = 20;
+  loadMoreFlag: boolean = true;
 
   constructor(private _router: Router, private _spotifyService: SpotifyService) { }
 
   ngOnInit() {
-    const accessToken = sessionStorage.getItem('access');
-    const refreshToken = sessionStorage.getItem('refresh');
-    if (accessToken && refreshToken) {
-      this.$playlists = this._spotifyService.getUserPlaylists(accessToken, refreshToken);
+    this.accessToken = sessionStorage.getItem('access');
+    this.refreshToken = sessionStorage.getItem('refresh');
+    if (this.accessToken && this.refreshToken) {
+      this._getUserPlaylists(this.accessToken, this.refreshToken, this.page);
     } else {
       this._router.navigate(['home']);
     }
+  }
+
+  loadMore(): void {
+    if (this.loadMoreFlag) {
+      this.page++;
+      this._getUserPlaylists(this.accessToken, this.refreshToken, this.page);
+    }
+  }
+
+  private _getUserPlaylists(accessToken: string, refreshToken: string, page: number) {
+    this._spotifyService.getUserPlaylists(accessToken, refreshToken, page)
+      .subscribe(playlists => {
+        if (playlists.length != this.perPage) {
+          this.loadMoreFlag = false;
+        }
+        this.playlists = this.playlists.concat(playlists);
+      });
   }
 
 }
