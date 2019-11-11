@@ -19,8 +19,8 @@ export class SigninComponent implements OnInit {
       this._spotifyService.authorize(code).subscribe(data => {
         sessionStorage.setItem("access", data.accessToken);
         sessionStorage.setItem("refresh", data.refreshToken);
+        this._router.navigate(['/playlists']);
       });
-      this._router.navigate(['/playlists']);
     });
   }
 

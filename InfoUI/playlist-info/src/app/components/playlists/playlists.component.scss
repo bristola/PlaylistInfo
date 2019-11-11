@@ -4,6 +4,7 @@
     text-align: center;
     justify-content: center;
     min-width: 500px;
+    margin-bottom: 50px;
 }
 
 p {
@@ -11,17 +12,23 @@ p {
 }
 
 mat-card {
+    width: 500px;
+    min-width: 200px;
     padding-top: 35px;
     padding-bottom: 50px;
+    margin-bottom: 50px;
+
+    img {
+        width: 33%;
+    }
 }
 
-button {
-    margin-bottom: 25px;
+.info-button {
     background-color: #33779e;
     color: white;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
-    font-size: medium;
+}
+
+.spotify-button {
+    background-color: #1DB954;
+    color: white;
 }
