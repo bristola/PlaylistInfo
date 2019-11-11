@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlists',
@@ -12,12 +13,16 @@ export class PlaylistsComponent implements OnInit {
   code: string;
   $playlists: Observable<any>;
 
-  constructor(private _spotifyService: SpotifyService) { }
+  constructor(private _router: Router, private _spotifyService: SpotifyService) { }
 
   ngOnInit() {
     const accessToken = sessionStorage.getItem('access');
     const refreshToken = sessionStorage.getItem('refresh');
-    this.$playlists = this._spotifyService.getUserPlaylists(accessToken, refreshToken);
+    if (accessToken && refreshToken) {
+      this.$playlists = this._spotifyService.getUserPlaylists(accessToken, refreshToken);
+    } else {
+      this._router.navigate(['home']);
+    }
   }
 
 }
