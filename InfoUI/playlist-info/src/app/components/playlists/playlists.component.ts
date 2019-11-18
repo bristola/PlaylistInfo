@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -37,6 +36,10 @@ export class PlaylistsComponent implements OnInit {
     }
   }
 
+  generateInfo(playlistID: string): void {
+    this._generateInfo(this.accessToken, this.refreshToken, playlistID);
+  }
+
   private _getUserPlaylists(accessToken: string, refreshToken: string, page: number) {
     this._spotifyService.getUserPlaylists(accessToken, refreshToken, page)
       .subscribe(playlists => {
@@ -45,6 +48,11 @@ export class PlaylistsComponent implements OnInit {
         }
         this.playlists = this.playlists.concat(playlists);
       });
+  }
+
+  private _generateInfo(accessToken: string, refreshToken: string, playlistID: string) {
+    this._spotifyService.generateInfo(accessToken, refreshToken, playlistID)
+      .subscribe();
   }
 
 }

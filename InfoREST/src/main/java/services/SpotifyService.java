@@ -12,10 +12,12 @@ import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredential
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
+import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import constants.Constants;
@@ -76,7 +78,7 @@ public class SpotifyService {
 
     public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
 
-        String userID = this.getUser(accessToken, refreshToken);
+        this.accessAPI(accessToken, refreshToken);
 
         GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = this.api
             .getListOfCurrentUsersPlaylists()
@@ -91,19 +93,32 @@ public class SpotifyService {
 
         return playlists;
 
-   }
+    }
 
-   private String getUser(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+    public void generateInfo(String accessToken, String refreshToken, String playlistID) throws IOException, SpotifyWebApiException {
+
+        this.accessAPI(accessToken, refreshToken);
+
+        GetPlaylistsTracksRequest getPlaylistsTracksRequest = api
+            .getPlaylistsTracks(playlistID)
+            .build();
+
+        Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsTracksRequest.execute();
+        PlaylistTrack[] tracks = playlistTrackPaging.getItems();
+
+        List<>
+
+        for (PlaylistTrack track : tracks) {
+            System.out.println(track);
+        }
+
+    }
+
+   private void accessAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
 
        this.api.setAccessToken(accessToken);
        this.api.setRefreshToken(refreshToken);
 
-       GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = this.api.getCurrentUsersProfile()
-           .build();
-
-       User user = getCurrentUsersProfileRequest.execute();
-
-       return user.getId();
    }
 
 }
