@@ -35,22 +35,11 @@ public class SpotifyService {
     @Value("${spotify.redirectURI}")
     private String uri;
 
-    private SpotifyApi api;
+    public String getSigninUri() throws IOException, SpotifyWebApiException {
 
-    @PostConstruct
-    public void init() {
-        URI redirectUri = SpotifyHttpManager.makeUri(uri);
+        SpotifyApi api = this.getAPI();
 
-        this.api = new SpotifyApi.Builder()
-            .setClientSecret(clientSecret)
-            .setClientId(clientId)
-            .setRedirectUri(redirectUri)
-            .build();
-    }
-
-    public String getSigninUri() {
-
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = this.api.authorizationCodeUri()
+        AuthorizationCodeUriRequest authorizationCodeUriRequest = api.authorizationCodeUri()
             .scope(Constants.SCOPES)
             .show_dialog(true)
             .build();
@@ -63,7 +52,9 @@ public class SpotifyService {
 
     public AuthorizeResponse authorizeUser(String code) throws IOException, SpotifyWebApiException {
 
-        AuthorizationCodeRequest authorizationCodeRequest = this.api.authorizationCode(code.trim())
+        SpotifyApi api = this.getAPI();
+
+        AuthorizationCodeRequest authorizationCodeRequest = api.authorizationCode(code.trim())
             .build();
 
         AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
@@ -78,9 +69,9 @@ public class SpotifyService {
 
     public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
 
-        this.accessAPI(accessToken, refreshToken);
+        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
 
-        GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = this.api
+        GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = api
             .getListOfCurrentUsersPlaylists()
             .limit(Constants.PLAYLIST_NUM)
             .offset(Constants.PLAYLIST_NUM * page)
@@ -97,7 +88,9 @@ public class SpotifyService {
 
     // public void generateInfo(String accessToken, String refreshToken, String playlistID) throws IOException, SpotifyWebApiException {
     //
-    //     this.accessAPI(accessToken, refreshToken);
+    //     SpotifyApi api = this.getAPI();
+    //     api.setAccessToken(accessToken);
+    //     api.setRefreshToken(refreshToken);
     //
     //     GetPlaylistsTracksRequest getPlaylistsTracksRequest = api
     //         .getPlaylistsTracks(playlistID)
@@ -114,10 +107,26 @@ public class SpotifyService {
     //
     // }
 
-   private void accessAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+    private SpotifyApi getAPI() throws IOException, SpotifyWebApiException {
+        URI redirectUri = SpotifyHttpManager.makeUri(uri);
 
-       this.api.setAccessToken(accessToken);
-       this.api.setRefreshToken(refreshToken);
+        SpotifyApi api =new SpotifyApi.Builder()
+            .setClientSecret(clientSecret)
+            .setClientId(clientId)
+            .setRedirectUri(redirectUri)
+            .build();
+
+        return api;
+    }
+
+    private SpotifyApi getAuthorizedAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+
+       SpotifyApi api = this.getAPI();
+
+       api.setAccessToken(accessToken);
+       api.setRefreshToken(refreshToken);
+
+       return api;
 
    }
 

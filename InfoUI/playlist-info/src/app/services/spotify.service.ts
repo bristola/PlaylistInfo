@@ -15,11 +15,17 @@ export class SpotifyService {
   constructor(private _httpClient: HttpClient) { }
 
   setAuthorizationData(authData: IAuthorizeResponse): void {
-    this.authData = authData;
+    sessionStorage.setItem('accessToken', authData.accessToken);
+    sessionStorage.setItem('refreshToken', authData.refreshToken);
   }
 
   getAuthorizationData(): IAuthorizeResponse {
-    return this.authData;
+    const accessToken = sessionStorage.getItem('accessToken');
+    const refreshToken = sessionStorage.getItem('refreshToken');
+    
+    return !accessToken && !refreshToken ?
+      null :
+      { accessToken: accessToken, refreshToken: refreshToken };
   }
 
   getSigninURI(): Observable<string> {
