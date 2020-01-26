@@ -40,10 +40,10 @@ public class SpotifyController {
         return _spotifyService.getUserPlaylists(accessToken, refreshToken, page);
     }
 
-    @GetMapping(value = "/generateinfo/{playlistID}")
-    public void generateInfo(@PathVariable("playlistID") String playlistID,
-                             @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
-                             @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
-        _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
-    }
+    // @GetMapping(value = "/generateinfo/{playlistID}")
+    // public void generateInfo(@PathVariable("playlistID") String playlistID,
+    //                          @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
+    //                          @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
+    //     _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
+    // }
 }

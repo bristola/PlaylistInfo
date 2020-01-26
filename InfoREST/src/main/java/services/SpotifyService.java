@@ -95,24 +95,24 @@ public class SpotifyService {
 
     }
 
-    public void generateInfo(String accessToken, String refreshToken, String playlistID) throws IOException, SpotifyWebApiException {
-
-        this.accessAPI(accessToken, refreshToken);
-
-        GetPlaylistsTracksRequest getPlaylistsTracksRequest = api
-            .getPlaylistsTracks(playlistID)
-            .build();
-
-        Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsTracksRequest.execute();
-        PlaylistTrack[] tracks = playlistTrackPaging.getItems();
-
-        List<>
-
-        for (PlaylistTrack track : tracks) {
-            System.out.println(track);
-        }
-
-    }
+    // public void generateInfo(String accessToken, String refreshToken, String playlistID) throws IOException, SpotifyWebApiException {
+    //
+    //     this.accessAPI(accessToken, refreshToken);
+    //
+    //     GetPlaylistsTracksRequest getPlaylistsTracksRequest = api
+    //         .getPlaylistsTracks(playlistID)
+    //         .build();
+    //
+    //     Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsTracksRequest.execute();
+    //     PlaylistTrack[] tracks = playlistTrackPaging.getItems();
+    //
+    //     List<>
+    //
+    //     for (PlaylistTrack track : tracks) {
+    //         System.out.println(track);
+    //     }
+    //
+    // }
 
    private void accessAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
 

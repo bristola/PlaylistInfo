@@ -5,8 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
-import { SigninComponent } from './components/signin/signin.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
@@ -18,13 +17,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     PlaylistsComponent,
-    SigninComponent,
     HeaderComponent,
     FooterComponent
   ],
@@ -42,7 +41,13 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     MatIconModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpotifyAuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

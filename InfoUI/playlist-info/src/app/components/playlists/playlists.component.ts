@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-playlists',
@@ -17,31 +18,28 @@ export class PlaylistsComponent implements OnInit {
   perPage: number = 20;
   loadMoreFlag: boolean = true;
 
-  constructor(private _router: Router, private _spotifyService: SpotifyService) { }
+  constructor(private _router: Router,
+              private _spotifyService: SpotifyService,
+              private _location: Location) { }
 
   ngOnInit() {
-    this.accessToken = sessionStorage.getItem('access');
-    this.refreshToken = sessionStorage.getItem('refresh');
-    if (this.accessToken && this.refreshToken) {
-      this._getUserPlaylists(this.accessToken, this.refreshToken, this.page);
-    } else {
-      this._router.navigate(['home']);
-    }
+    this._location.replaceState(this._router.url);
+    this._getUserPlaylists(this.page);
   }
 
   loadMore(): void {
     if (this.loadMoreFlag) {
       this.page++;
-      this._getUserPlaylists(this.accessToken, this.refreshToken, this.page);
+      this._getUserPlaylists(this.page);
     }
   }
 
   generateInfo(playlistID: string): void {
-    this._generateInfo(this.accessToken, this.refreshToken, playlistID);
+    this._generateInfo(playlistID);
   }
 
-  private _getUserPlaylists(accessToken: string, refreshToken: string, page: number) {
-    this._spotifyService.getUserPlaylists(accessToken, refreshToken, page)
+  private _getUserPlaylists(page: number) {
+    this._spotifyService.getUserPlaylists(page)
       .subscribe(playlists => {
         if (playlists.length != this.perPage) {
           this.loadMoreFlag = false;
@@ -50,8 +48,8 @@ export class PlaylistsComponent implements OnInit {
       });
   }
 
-  private _generateInfo(accessToken: string, refreshToken: string, playlistID: string) {
-    this._spotifyService.generateInfo(accessToken, refreshToken, playlistID)
+  private _generateInfo(playlistID: string) {
+    this._spotifyService.generateInfo(playlistID)
       .subscribe();
   }
 

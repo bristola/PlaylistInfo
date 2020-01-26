@@ -2,14 +2,19 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
-import { SigninComponent } from './components/signin/signin.component';
+import { SpotifyAuthGuard } from './route-guards/spotify-auth.guard';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'playlists', component: PlaylistsComponent},
-  { path: 'signin', component: SigninComponent }
+  { 
+    path: '', 
+    component: HomeComponent 
+  },
+  { 
+    path: 'playlists', 
+    component: PlaylistsComponent,
+    canActivate: [SpotifyAuthGuard]
+  }
 ];
 
 @NgModule({
