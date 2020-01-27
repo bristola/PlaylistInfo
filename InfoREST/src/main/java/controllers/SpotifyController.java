@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import services.SpotifyService;
 import constants.Constants;
 import domain.AuthorizeResponse;
+import domain.SimplePlaylist;
 
 @RestController
 public class SpotifyController {
@@ -34,7 +36,7 @@ public class SpotifyController {
     }
 
     @GetMapping(value = "/playlists/{page}")
-    public PlaylistSimplified[] getPlaylists(@PathVariable("page") int page,
+    public List<SimplePlaylist> getPlaylists(@PathVariable("page") int page,
                                              @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                                              @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
         return _spotifyService.getUserPlaylists(accessToken, refreshToken, page);

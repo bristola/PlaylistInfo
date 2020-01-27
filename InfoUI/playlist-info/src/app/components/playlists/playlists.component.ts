@@ -23,10 +23,14 @@ export class PlaylistsComponent implements OnInit {
               private _location: Location) { }
 
   ngOnInit() {
-    this._location.replaceState(this._router.url);
+    this._location.replaceState('playlists');
     this._getUserPlaylists(this.page);
   }
 
+  ///////////////////////////////////////////
+  //            Public Methods            //
+  //////////////////////////////////////////
+  
   loadMore(): void {
     if (this.loadMoreFlag) {
       this.page++;
@@ -37,6 +41,10 @@ export class PlaylistsComponent implements OnInit {
   generateInfo(playlistID: string): void {
     this._generateInfo(playlistID);
   }
+
+  ///////////////////////////////////////////
+  //           Private Methods            //
+  //////////////////////////////////////////
 
   private _getUserPlaylists(page: number) {
     this._spotifyService.getUserPlaylists(page)

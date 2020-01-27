@@ -12,15 +12,15 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <ng-template matExpansionPanelContent>
-                        <img mat-card-image [src]="playlist.images[0].url" alt="Album Cover">
+                        <img mat-card-image [src]="playlist.imageUrl" alt="Album Cover">
                         <br>
-                        <b>Created By: </b>{{playlist.owner.displayName}}
+                        <b>Created By: </b>{{playlist.createdBy}}
                         <br>
                         <b>Collaborative: </b>{{playlist.isCollaborative}}
                         <br>
                         <b>Public: </b>{{playlist.isPublicAccess}}
                         <mat-action-row>
-                            <a [href]="playlist.externalUrls.externalUrls.spotify">
+                            <a [href]="playlist.spotifyUrl">
                                 <button mat-button class="spotify-button">View on Spotify</button>
                             </a>
                             <button mat-button

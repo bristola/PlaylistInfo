@@ -2,9 +2,12 @@ package services;
 
 import java.net.URI;
 import java.io.IOException;
-import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -22,6 +25,8 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import constants.Constants;
 import domain.AuthorizeResponse;
+import domain.SimplePlaylist;
+import factories.SimplePlaylistFactory;
 
 @Service
 public class SpotifyService {
@@ -35,14 +40,17 @@ public class SpotifyService {
     @Value("${spotify.redirectURI}")
     private String uri;
 
+    @Autowired
+    private SimplePlaylistFactory simplePlaylistFactory;
+
     public String getSigninUri() throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAPI();
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = api.authorizationCodeUri()
-            .scope(Constants.SCOPES)
-            .show_dialog(true)
-            .build();
+                                                                     .scope(Constants.SCOPES)
+                                                                     .show_dialog(true)
+                                                                     .build();
 
         URI uri = authorizationCodeUriRequest.execute();
 
@@ -67,22 +75,27 @@ public class SpotifyService {
         return response;
     }
 
-    public PlaylistSimplified[] getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
+    public List<SimplePlaylist> getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
 
-        GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = api
-            .getListOfCurrentUsersPlaylists()
-            .limit(Constants.PLAYLIST_NUM)
-            .offset(Constants.PLAYLIST_NUM * page)
-            .build();
+        GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = api.getListOfCurrentUsersPlaylists()
+                                                                                  .limit(Constants.PLAYLIST_NUM)
+                                                                                  .offset(Constants.PLAYLIST_NUM * page)
+                                                                                  .build();
 
         // Execute request
         Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfUsersPlaylistsRequest.execute();
-        // Turn result into an array
-        PlaylistSimplified[] playlists = playlistSimplifiedPaging.getItems();
 
-        return playlists;
+        // Turn result into a list
+        List<PlaylistSimplified> playlists = Arrays.asList(playlistSimplifiedPaging.getItems());
+
+        // Map to custom objects
+        List<SimplePlaylist> simplePlaylists = playlists.stream()
+                                                        .map(p -> SimplePlaylistFactory.create(p))
+                                                        .collect(Collectors.toList());
+
+        return simplePlaylists;
 
     }
 
@@ -111,10 +124,10 @@ public class SpotifyService {
         URI redirectUri = SpotifyHttpManager.makeUri(uri);
 
         SpotifyApi api =new SpotifyApi.Builder()
-            .setClientSecret(clientSecret)
-            .setClientId(clientId)
-            .setRedirectUri(redirectUri)
-            .build();
+                                      .setClientSecret(clientSecret)
+                                      .setClientId(clientId)
+                                      .setRedirectUri(redirectUri)
+                                      .build();
 
         return api;
     }

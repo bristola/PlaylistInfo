@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { HEADERS } from '../constants/constants';
+import { IAuthorizeResponse, ISimplePlaylist } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +38,8 @@ export class SpotifyService {
     return this._httpClient.get<IAuthorizeResponse>(`${this.API_URL}/authorize`, {headers: headers});
   }
 
-  getUserPlaylists(page: number): Observable<any> {
-    return this._httpClient.get(`${this.API_URL}/playlists/${page}`);
+  getUserPlaylists(page: number): Observable<ISimplePlaylist[]> {
+    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/playlists/${page}`);
   }
 
   generateInfo(playlistID: string): Observable<any> {
