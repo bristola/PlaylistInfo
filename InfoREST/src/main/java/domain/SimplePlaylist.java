@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter @Setter @NoArgsConstructor
 public class SimplePlaylist {
+    private String id;
     private String name;
     private String createdBy;
     private String spotifyUrl;

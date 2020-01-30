@@ -18,8 +18,7 @@ export class PlaylistsComponent implements OnInit {
   perPage: number = 20;
   loadMoreFlag: boolean = true;
 
-  constructor(private _router: Router,
-              private _spotifyService: SpotifyService,
+  constructor(private _spotifyService: SpotifyService,
               private _location: Location) { }
 
   ngOnInit() {

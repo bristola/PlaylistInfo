@@ -4,6 +4,7 @@ import java.net.URI;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +19,15 @@ import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylist
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+import com.wrapper.spotify.requests.data.artists.GetSeveralArtistsRequest;
+import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.model_objects.specification.User;
+import com.wrapper.spotify.model_objects.specification.Playlist;
 import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
+import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.google.common.collect.Lists;
 
 import constants.Constants;
 import domain.AuthorizeResponse;
@@ -99,31 +105,80 @@ public class SpotifyService {
 
     }
 
-    // public void generateInfo(String accessToken, String refreshToken, String playlistID) throws IOException, SpotifyWebApiException {
-    //
-    //     SpotifyApi api = this.getAPI();
-    //     api.setAccessToken(accessToken);
-    //     api.setRefreshToken(refreshToken);
-    //
-    //     GetPlaylistsTracksRequest getPlaylistsTracksRequest = api
-    //         .getPlaylistsTracks(playlistID)
-    //         .build();
-    //
-    //     Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsTracksRequest.execute();
-    //     PlaylistTrack[] tracks = playlistTrackPaging.getItems();
-    //
-    //     List<>
-    //
-    //     for (PlaylistTrack track : tracks) {
-    //         System.out.println(track);
-    //     }
-    //
-    // }
+    public void generateInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {
+
+        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+
+        GetPlaylistRequest getPlaylistRequest = api.getPlaylist(playlistID)
+                                                   .build();
+
+        Playlist playlist = getPlaylistRequest.execute();
+
+        List<PlaylistTrack> tracks = this.getPlaylistTracks(api, playlistID);
+
+        List<String> artistIds = tracks.stream()
+                                       .flatMap(t -> Arrays.asList(t.getTrack().getArtists()).stream().map(a -> a.getId()))
+                                       .distinct()
+                                       .collect(Collectors.toList());
+
+        List<Artist> artists = this.getArtists(api, artistIds);
+
+        
+    }
+
+    private List<PlaylistTrack> getPlaylistTracks(SpotifyApi api, String id) throws InterruptedException, IOException, SpotifyWebApiException {
+        int page = 0;
+        List<PlaylistTrack> allTracks = new ArrayList<PlaylistTrack>();
+
+        do {
+            if (page != 0)
+                Thread.sleep(1000);
+
+            GetPlaylistsTracksRequest getPlaylistsTracksRequest = api.getPlaylistsTracks(id)
+                                                                     .limit(Constants.TRACKS_NUM)
+                                                                     .offset(Constants.TRACKS_NUM * page)
+                                                                     .build();
+
+            Paging<PlaylistTrack> playlistTrackPaging = getPlaylistsTracksRequest.execute();
+            List<PlaylistTrack> tracks = Arrays.asList(playlistTrackPaging.getItems());
+
+            allTracks.addAll(tracks);
+
+            page++;
+
+        } while (allTracks != null && allTracks.size() % Constants.TRACKS_NUM == 0);
+
+        return allTracks;
+    }
+
+    private List<Artist> getArtists(SpotifyApi api, List<String> ids) throws InterruptedException, IOException, SpotifyWebApiException {
+        int page = 0;
+        List<Artist> allArtists = new ArrayList<Artist>();
+        List<List<String>> requestIds = Lists.partition(ids, Constants.ARTIST_NUM);
+
+        for (List<String> request : requestIds) {
+            if (page != 0)
+                Thread.sleep(1000);
+
+            String[] idsArray = request.toArray(new String[request.size()]);
+
+            GetSeveralArtistsRequest getSeveralArtistsRequest = api.getSeveralArtists(idsArray)
+                                                                          .build();
+
+            Artist[] artists = getSeveralArtistsRequest.execute();
+
+            allArtists.addAll(Arrays.asList(artists));
+
+            page++;
+        }
+
+        return allArtists;
+    }
 
     private SpotifyApi getAPI() throws IOException, SpotifyWebApiException {
         URI redirectUri = SpotifyHttpManager.makeUri(uri);
 
-        SpotifyApi api =new SpotifyApi.Builder()
+        SpotifyApi api = new SpotifyApi.Builder()
                                       .setClientSecret(clientSecret)
                                       .setClientId(clientId)
                                       .setRedirectUri(redirectUri)
@@ -134,10 +189,10 @@ public class SpotifyService {
 
     private SpotifyApi getAuthorizedAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
 
-       SpotifyApi api = this.getAPI();
-
-       api.setAccessToken(accessToken);
-       api.setRefreshToken(refreshToken);
+        SpotifyApi api = new SpotifyApi.Builder()
+                                      .setAccessToken(accessToken)
+                                      .setRefreshToken(refreshToken)
+                                      .build();
 
        return api;
 
