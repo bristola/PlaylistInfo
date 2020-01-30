@@ -18,6 +18,7 @@ import services.SpotifyService;
 import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
+import domain.AggregatePlaylist;
 
 @RestController
 public class SpotifyController {
@@ -43,9 +44,9 @@ public class SpotifyController {
     }
 
     @GetMapping(value = "/generateinfo/{playlistID}")
-    public void generateInfo(@PathVariable("playlistID") String playlistID,
+    public AggregatePlaylist generateInfo(@PathVariable("playlistID") String playlistID,
                              @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                              @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
+        return _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
     }
 }

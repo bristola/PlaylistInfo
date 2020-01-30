@@ -32,7 +32,9 @@ import com.google.common.collect.Lists;
 import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
+import domain.AggregatePlaylist;
 import factories.SimplePlaylistFactory;
+import factories.AggregatePlaylistFactory;
 
 @Service
 public class SpotifyService {
@@ -48,6 +50,9 @@ public class SpotifyService {
 
     @Autowired
     private SimplePlaylistFactory simplePlaylistFactory;
+
+    @Autowired
+    private AggregatePlaylistFactory aggregatePlaylistFactory;
 
     public String getSigninUri() throws IOException, SpotifyWebApiException {
 
@@ -105,7 +110,7 @@ public class SpotifyService {
 
     }
 
-    public void generateInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {
+    public AggregatePlaylist generateInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
 
@@ -123,7 +128,7 @@ public class SpotifyService {
 
         List<Artist> artists = this.getArtists(api, artistIds);
 
-        
+        return AggregatePlaylistFactory.create(playlist, tracks, artists);
     }
 
     private List<PlaylistTrack> getPlaylistTracks(SpotifyApi api, String id) throws InterruptedException, IOException, SpotifyWebApiException {
@@ -163,7 +168,7 @@ public class SpotifyService {
             String[] idsArray = request.toArray(new String[request.size()]);
 
             GetSeveralArtistsRequest getSeveralArtistsRequest = api.getSeveralArtists(idsArray)
-                                                                          .build();
+                                                                   .build();
 
             Artist[] artists = getSeveralArtistsRequest.execute();
 
@@ -179,10 +184,10 @@ public class SpotifyService {
         URI redirectUri = SpotifyHttpManager.makeUri(uri);
 
         SpotifyApi api = new SpotifyApi.Builder()
-                                      .setClientSecret(clientSecret)
-                                      .setClientId(clientId)
-                                      .setRedirectUri(redirectUri)
-                                      .build();
+                                       .setClientSecret(clientSecret)
+                                       .setClientId(clientId)
+                                       .setRedirectUri(redirectUri)
+                                       .build();
 
         return api;
     }
@@ -190,9 +195,9 @@ public class SpotifyService {
     private SpotifyApi getAuthorizedAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = new SpotifyApi.Builder()
-                                      .setAccessToken(accessToken)
-                                      .setRefreshToken(refreshToken)
-                                      .build();
+                                       .setAccessToken(accessToken)
+                                       .setRefreshToken(refreshToken)
+                                       .build();
 
        return api;
 

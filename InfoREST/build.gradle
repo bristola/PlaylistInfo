@@ -37,7 +37,7 @@ dependencies {
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
     // https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp
     compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
-    compile 'se.michaelthelin.spotify:spotify-web-api-java:2.1.1'
+    compile 'se.michaelthelin.spotify:spotify-web-api-java:4.2.1'
     testCompile("junit:junit")
     compileOnly 'org.projectlombok:lombok:1.18.10'
 	annotationProcessor 'org.projectlombok:lombok:1.18.10'
