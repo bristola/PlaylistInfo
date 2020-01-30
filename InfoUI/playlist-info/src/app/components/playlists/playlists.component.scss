@@ -42,6 +42,16 @@
             margin-right: 10px;
             font-size: 12px;
         }
+
+        mat-panel-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .image-small {
+            width: 35px;
+            margin-right: 15px;
+        }
     }
 
     ::ng-deep .mat-spinner circle {

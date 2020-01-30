@@ -8,6 +8,7 @@
                 <mat-expansion-panel *ngFor="let playlist of playlists">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
+                            <img class="image-small" [src]="playlist.imageUrl" alt="Album Cover List">
                             {{playlist.name}}
                         </mat-panel-title>
                     </mat-expansion-panel-header>
@@ -18,7 +19,7 @@
                         <br>
                         <b>Collaborative: </b>{{playlist.isCollaborative}}
                         <br>
-                        <b>Public: </b>{{playlist.isPublicAccess}}
+                        <b>Public: </b>{{playlist.isPublic}}
                         <mat-action-row>
                             <a [href]="playlist.spotifyUrl">
                                 <button mat-button class="spotify-button">View on Spotify</button>
