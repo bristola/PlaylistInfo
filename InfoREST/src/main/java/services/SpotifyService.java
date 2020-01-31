@@ -33,8 +33,8 @@ import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
-import factories.SimplePlaylistFactory;
-import factories.AggregatePlaylistFactory;
+import domain.SimplePlaylistMapper;
+import domain.AggregatePlaylistMapper;
 
 @Service
 public class SpotifyService {
@@ -49,10 +49,10 @@ public class SpotifyService {
     private String uri;
 
     @Autowired
-    private SimplePlaylistFactory simplePlaylistFactory;
+    private SimplePlaylistMapper simplePlaylistMapper;
 
     @Autowired
-    private AggregatePlaylistFactory aggregatePlaylistFactory;
+    private AggregatePlaylistMapper aggregatePlaylistMapper;
 
     public String getSigninUri() throws IOException, SpotifyWebApiException {
 
@@ -60,7 +60,7 @@ public class SpotifyService {
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = api.authorizationCodeUri()
                                                                      .scope(Constants.SCOPES)
-                                                                     .show_dialog(true)
+                                                                     .show_dialog(false)
                                                                      .build();
 
         URI uri = authorizationCodeUriRequest.execute();
@@ -103,7 +103,7 @@ public class SpotifyService {
 
         // Map to custom objects
         List<SimplePlaylist> simplePlaylists = playlists.stream()
-                                                        .map(p -> SimplePlaylistFactory.create(p))
+                                                        .map(p -> SimplePlaylistMapper.map(p))
                                                         .collect(Collectors.toList());
 
         return simplePlaylists;
@@ -128,7 +128,7 @@ public class SpotifyService {
 
         List<Artist> artists = this.getArtists(api, artistIds);
 
-        return AggregatePlaylistFactory.create(playlist, tracks, artists);
+        return AggregatePlaylistMapper.map(playlist, tracks, artists);
     }
 
     private List<PlaylistTrack> getPlaylistTracks(SpotifyApi api, String id) throws InterruptedException, IOException, SpotifyWebApiException {

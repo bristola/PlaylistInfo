@@ -1,4 +1,4 @@
-package factories;
+package domain;
 
 import java.util.List;
 import java.util.Arrays;
@@ -14,9 +14,9 @@ import domain.Song;
 import constants.Constants;
 
 @Component
-public class SongFactory {
+public class SongMapper {
 
-    public static Song create(PlaylistTrack playlistTrack, List<Artist> artists) {
+    public static Song map(PlaylistTrack playlistTrack, List<Artist> artists) {
         Song song = new Song();
 
         Track track = playlistTrack.getTrack();

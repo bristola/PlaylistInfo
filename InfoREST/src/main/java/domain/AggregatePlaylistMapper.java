@@ -1,4 +1,4 @@
-package factories;
+package domain;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,16 +10,16 @@ import com.wrapper.spotify.model_objects.specification.Artist;
 
 import domain.AggregatePlaylist;
 import domain.Song;
-import factories.SongFactory;
+import domain.SongMapper;
 import constants.Constants;
 
 @Component
-public class AggregatePlaylistFactory {
+public class AggregatePlaylistMapper {
 
     @Autowired
-    private SongFactory songFactory;
+    private SongMapper songMapper;
 
-    public static AggregatePlaylist create(Playlist playlist, List<PlaylistTrack> tracks, List<Artist> artists) {
+    public static AggregatePlaylist map(Playlist playlist, List<PlaylistTrack> tracks, List<Artist> artists) {
         AggregatePlaylist aggregatePlaylist = new AggregatePlaylist();
 
         aggregatePlaylist.setName(playlist.getName());
@@ -37,7 +37,7 @@ public class AggregatePlaylistFactory {
         aggregatePlaylist.setIsPublic(playlist.getIsPublicAccess());
 
         List<Song> songs = tracks.stream()
-                                 .map(t -> SongFactory.create(t, artists))
+                                 .map(t -> SongMapper.map(t, artists))
                                  .collect(Collectors.toList());
         aggregatePlaylist.setSongs(songs);
 

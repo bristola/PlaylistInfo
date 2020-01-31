@@ -1,4 +1,4 @@
-package factories;
+package domain;
 
 import org.springframework.stereotype.Component;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
@@ -6,9 +6,9 @@ import domain.SimplePlaylist;
 import constants.Constants;
 
 @Component
-public class SimplePlaylistFactory {
+public class SimplePlaylistMapper {
 
-    public static SimplePlaylist create(PlaylistSimplified playlist) {
+    public static SimplePlaylist map(PlaylistSimplified playlist) {
         SimplePlaylist simplePlaylist = new SimplePlaylist();
 
         simplePlaylist.setId(playlist.getId());

@@ -3,7 +3,7 @@ package web;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"services", "controllers", "configuration", "factories"})
+@SpringBootApplication(scanBasePackages = {"services", "controllers", "configuration", "domain"})
 public class Application {
 
     public static void main(String[] args) {
