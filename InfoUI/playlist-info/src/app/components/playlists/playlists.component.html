@@ -15,18 +15,21 @@
                     <ng-template matExpansionPanelContent>
                         <img mat-card-image [src]="playlist.imageUrl" alt="Album Cover">
                         <br>
-                        <b>Created By: </b>{{playlist.createdBy}}
+                        <b>Author</b>
                         <br>
-                        <b>Collaborative: </b>{{playlist.isCollaborative}}
+                        {{playlist.createdBy}}
                         <br>
-                        <b>Public: </b>{{playlist.isPublic}}
+                        <mat-icon matTooltip="Playlist is Public" *ngIf="playlist.isPublic">public</mat-icon>
+                        <mat-icon matTooltip="Playlist is Private" *ngIf="!playlist.isPublic">visibility_off</mat-icon>
+                        <mat-icon matTooltip="Playlist is Collaborative" *ngIf="playlist.isCollaborative">people</mat-icon>
+                        <mat-icon matTooltip="Playlist is not Collaborative" *ngIf="!playlist.isCollaborative">person</mat-icon>
                         <mat-action-row>
                             <a [href]="playlist.spotifyUrl">
                                 <button mat-button class="spotify-button">View on Spotify</button>
                             </a>
                             <button mat-button
                                     class="info-button"
-                                    (click)="generateInfo(playlist.id)">Generate Playlist Info</button>
+                                    (click)="generateInfo(playlist.id)">Generate Info</button>
                         </mat-action-row>
                     </ng-template>
                 </mat-expansion-panel>

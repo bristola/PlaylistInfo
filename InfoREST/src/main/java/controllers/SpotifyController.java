@@ -28,6 +28,7 @@ public class SpotifyController {
 
     @GetMapping(value = "/signinuri")
     public String getSigninUri() throws IOException, SpotifyWebApiException {
+        // throw new IOException();
         return _spotifyService.getSigninUri();
     }
 

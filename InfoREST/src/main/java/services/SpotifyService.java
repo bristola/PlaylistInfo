@@ -107,7 +107,6 @@ public class SpotifyService {
                                                         .collect(Collectors.toList());
 
         return simplePlaylists;
-
     }
 
     public AggregatePlaylist generateInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {

@@ -17,6 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor';
 
 @NgModule({
@@ -39,7 +40,8 @@ import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor'
     MatExpansionModule,
     MatRippleModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule 
   ],
   providers: [
     {
