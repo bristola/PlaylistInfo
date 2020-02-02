@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor';
+import { PlaylistInfoComponent } from './components/playlist-info/playlist-info.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor'
     HomeComponent,
     PlaylistsComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PlaylistInfoComponent
   ],
   imports: [
     CommonModule,

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,11 +49,16 @@ public class SpotifyController {
         return _spotifyService.getUserPlaylists(accessToken, refreshToken, page);
     }
 
-    @GetMapping(value = "/generateinfo/{playlistID}")
-    public void generateInfo(@PathVariable("playlistID") String playlistID,
+    @PostMapping(value = "/generateplaylistinfo/{playlistId}")
+    public void generatePlaylistInfo(@PathVariable("playlistId") String playlistId,
                              @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                              @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        AggregatePlaylist aggregatedPlaylist = _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
+        AggregatePlaylist aggregatedPlaylist = _spotifyService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
         _aggregatePlaylistRepo.save(aggregatedPlaylist);
+    }
+
+    @GetMapping(value = "/getplaylistinfo/{playlistId}")
+    public AggregatePlaylist getPlaylistInfo(@PathVariable("playlistId") String playlistId) {
+        return _aggregatePlaylistRepo.findBySpotifyId(playlistId);
     }
 }

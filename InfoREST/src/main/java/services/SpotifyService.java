@@ -109,7 +109,7 @@ public class SpotifyService {
         return simplePlaylists;
     }
 
-    public AggregatePlaylist generateInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {
+    public AggregatePlaylist generatePlaylistInfo(String accessToken, String refreshToken, String playlistID) throws InterruptedException, IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
 

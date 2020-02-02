@@ -19,7 +19,8 @@ export class PlaylistsComponent implements OnInit {
   loadMoreFlag: boolean = true;
 
   constructor(private _spotifyService: SpotifyService,
-              private _location: Location) { }
+              private _location: Location,
+              private _router: Router) { }
 
   ngOnInit() {
     this._location.replaceState('playlists');
@@ -57,7 +58,9 @@ export class PlaylistsComponent implements OnInit {
 
   private _generateInfo(playlistID: string) {
     this._spotifyService.generateInfo(playlistID)
-      .subscribe();
+      .subscribe(() =>
+        this._router.navigate([`playlist/${playlistID}`])
+      );
   }
 
 }

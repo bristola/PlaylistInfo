@@ -1,5 +1,6 @@
 USE [SpotifyInfo];
 GRANT INSERT TO SpotifyRestUser;
+GRANT SELECT TO SpotifyRestUser;
 GO
 
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist] (
