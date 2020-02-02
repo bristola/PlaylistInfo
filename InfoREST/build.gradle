@@ -29,13 +29,13 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-devtools")
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    // https://mvnrepository.com/artifact/org.javassist/javassist
+    //compile("org.hibernate:hibernate-core:5.4.10.Final")
+    compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+    compile('com.microsoft.sqlserver:mssql-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     compile group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
-    // https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp
     compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
     compile 'se.michaelthelin.spotify:spotify-web-api-java:4.2.1'
     testCompile("junit:junit")

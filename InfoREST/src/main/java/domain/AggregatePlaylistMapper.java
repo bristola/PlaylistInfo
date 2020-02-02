@@ -23,6 +23,7 @@ public class AggregatePlaylistMapper {
         AggregatePlaylist aggregatePlaylist = new AggregatePlaylist();
 
         aggregatePlaylist.setName(playlist.getName());
+        aggregatePlaylist.setSpotifyId(playlist.getId());
         aggregatePlaylist.setCreatedBy(playlist.getOwner()
                                                .getDisplayName());
         aggregatePlaylist.setDescription(playlist.getDescription());

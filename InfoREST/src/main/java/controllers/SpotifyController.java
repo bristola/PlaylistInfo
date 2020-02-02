@@ -19,12 +19,16 @@ import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
+import repos.AggregatePlaylistRepo;
 
 @RestController
 public class SpotifyController {
 
     @Autowired
     private SpotifyService _spotifyService;
+
+    @Autowired
+    private AggregatePlaylistRepo _aggregatePlaylistRepo;
 
     @GetMapping(value = "/signinuri")
     public String getSigninUri() throws IOException, SpotifyWebApiException {
@@ -45,9 +49,10 @@ public class SpotifyController {
     }
 
     @GetMapping(value = "/generateinfo/{playlistID}")
-    public AggregatePlaylist generateInfo(@PathVariable("playlistID") String playlistID,
+    public void generateInfo(@PathVariable("playlistID") String playlistID,
                              @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                              @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        return _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
+        AggregatePlaylist aggregatedPlaylist = _spotifyService.generateInfo(accessToken, refreshToken, playlistID);
+        _aggregatePlaylistRepo.save(aggregatedPlaylist);
     }
 }

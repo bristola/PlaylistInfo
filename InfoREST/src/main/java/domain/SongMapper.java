@@ -21,6 +21,7 @@ public class SongMapper {
 
         Track track = playlistTrack.getTrack();
         song.setName(track.getName());
+        song.setSpotifyId(track.getId());
         song.setExplicit(track.getIsExplicit());
         song.setPopularity(track.getPopularity());
         song.setDuration(track.getDurationMs());
