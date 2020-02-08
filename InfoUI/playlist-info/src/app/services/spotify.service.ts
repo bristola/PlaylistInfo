@@ -49,4 +49,8 @@ export class SpotifyService {
   getPlaylistInfo(playlistId: string): Observable<any> {
     return this._httpClient.get(`${this.API_URL}/playlistinfo/${playlistId}`);
   }
+
+  getExistingUserPlaylists(): Observable<ISimplePlaylist[]> {
+    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/existingplaylists`);
+  }
 }

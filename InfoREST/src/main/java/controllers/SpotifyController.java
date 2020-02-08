@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
+import domain.SimplePlaylistMapper;
 import repos.AggregatePlaylistRepo;
 
 @RestController
@@ -31,6 +33,9 @@ public class SpotifyController {
 
     @Autowired
     private AggregatePlaylistRepo _aggregatePlaylistRepo;
+
+    @Autowired
+    private SimplePlaylistMapper simplePlaylistMapper;
 
     @GetMapping(value = "/signinuri")
     public String getSigninUri() throws IOException, SpotifyWebApiException {
@@ -53,12 +58,23 @@ public class SpotifyController {
     public void generatePlaylistInfo(@PathVariable("playlistId") String playlistId,
                                      @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                                      @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        AggregatePlaylist aggregatedPlaylist = _spotifyService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
-        _aggregatePlaylistRepo.save(aggregatedPlaylist);
+        AggregatePlaylist aggregatePlaylist = _spotifyService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
+        _aggregatePlaylistRepo.save(aggregatePlaylist);
     }
 
     @GetMapping(value = "/playlistinfo/{playlistId}")
     public AggregatePlaylist getPlaylistInfo(@PathVariable("playlistId") String playlistId) {
         return _aggregatePlaylistRepo.findBySpotifyId(playlistId);
+    }
+
+    @GetMapping(value = "/existingplaylists")
+    public List<SimplePlaylist> getExistingPlaylists(@RequestHeader(Constants.ACCESS_HEADER) String accessToken,
+                                                     @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
+        String username = _spotifyService.getUsername(accessToken, refreshToken);
+        List<AggregatePlaylist> aggregatePlaylists = _aggregatePlaylistRepo.findByCurrentUsername(username);
+        List<SimplePlaylist> simplePlaylists = aggregatePlaylists.stream()
+                                                                 .map(a -> SimplePlaylistMapper.map(a))
+                                                                 .collect(Collectors.toList());
+        return simplePlaylists;
     }
 }

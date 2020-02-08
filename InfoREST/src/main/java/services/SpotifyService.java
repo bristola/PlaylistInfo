@@ -132,6 +132,12 @@ public class SpotifyService {
         return AggregatePlaylistMapper.map(playlist, tracks, artists, currentUser);
     }
 
+    public String getUsername(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+
+        return this.getUsername(api);
+    }
+
     private String getUsername(SpotifyApi api) throws IOException, SpotifyWebApiException {
         GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = api.getCurrentUsersProfile()
                                                                          .build();

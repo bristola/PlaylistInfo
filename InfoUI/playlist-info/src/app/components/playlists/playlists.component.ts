@@ -25,6 +25,7 @@ export class PlaylistsComponent implements OnInit {
   ngOnInit() {
     this._location.replaceState('playlists');
     this._getUserPlaylists(this.page);
+    this._spotifyService.getExistingUserPlaylists().subscribe();
   }
 
   ///////////////////////////////////////////
