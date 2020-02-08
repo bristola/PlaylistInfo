@@ -18,7 +18,7 @@ CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist] (
 
 CREATE TABLE [SpotifyInfo].[dbo].[song] (
 	id INT IDENTITY(1,1) PRIMARY KEY,
-	spotify_id VARCHAR(100) NOT NULL,
+	spotify_id VARCHAR(100) NOT NULL UNIQUE,
 	name VARCHAR(100),
 	album VARCHAR(100),
 	album_url VARCHAR(60),
@@ -27,8 +27,8 @@ CREATE TABLE [SpotifyInfo].[dbo].[song] (
 	explicit BIT,
 	popularity INT,
 	duration INT,
-	artists VARCHAR(100),
-	genres VARCHAR(300)
+	artists VARCHAR(200),
+	genres VARCHAR(500)
 );
 
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist_songs] (

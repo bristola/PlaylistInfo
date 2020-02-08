@@ -130,6 +130,16 @@ public class SpotifyService {
         return AggregatePlaylistMapper.map(playlist, tracks, artists);
     }
 
+    public String getUsername(String accessToken, String refreshToken) {
+
+        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+
+        GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = api.getCurrentUsersProfile()
+                                                                         .build();
+
+        return getCurrentUsersProfileRequest.execute().getDisplayName();
+    }
+
     private List<PlaylistTrack> getPlaylistTracks(SpotifyApi api, String id) throws InterruptedException, IOException, SpotifyWebApiException {
         int page = 0;
         List<PlaylistTrack> allTracks = new ArrayList<PlaylistTrack>();
