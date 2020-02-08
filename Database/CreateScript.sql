@@ -1,6 +1,7 @@
 USE [SpotifyInfo];
 GRANT INSERT TO SpotifyRestUser;
 GRANT SELECT TO SpotifyRestUser;
+GRANT DELETE TO SpotifyRestUser;
 GO
 
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist] (
@@ -33,5 +34,5 @@ CREATE TABLE [SpotifyInfo].[dbo].[song] (
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist_songs] (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	aggregate_playlist_spotify_id VARCHAR(100) FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[aggregate_playlist](spotify_id),
-	songs_id VARCHAR(100) FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[song] (spotify_id)
+	songs_spotify_id VARCHAR(100) FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[song] (spotify_id)
 );
