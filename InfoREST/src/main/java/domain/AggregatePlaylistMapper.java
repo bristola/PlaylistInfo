@@ -19,9 +19,10 @@ public class AggregatePlaylistMapper {
     @Autowired
     private SongMapper songMapper;
 
-    public static AggregatePlaylist map(Playlist playlist, List<PlaylistTrack> tracks, List<Artist> artists) {
+    public static AggregatePlaylist map(Playlist playlist, List<PlaylistTrack> tracks, List<Artist> artists, String username) {
         AggregatePlaylist aggregatePlaylist = new AggregatePlaylist();
 
+        aggregatePlaylist.setCurrentUsername(username);
         aggregatePlaylist.setName(playlist.getName());
         aggregatePlaylist.setSpotifyId(playlist.getId());
         aggregatePlaylist.setCreatedBy(playlist.getOwner()

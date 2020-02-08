@@ -4,8 +4,8 @@ GRANT SELECT TO SpotifyRestUser;
 GO
 
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist] (
-	id INT IDENTITY (1, 1) PRIMARY KEY,
-	spotify_id VARCHAR(100) NOT NULL,
+	spotify_id VARCHAR(100) PRIMARY KEY,
+	current_username VARCHAR(100),
 	name VARCHAR(100),
 	created_by VARCHAR(100),
 	description VARCHAR(100),
@@ -17,8 +17,7 @@ CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist] (
 );
 
 CREATE TABLE [SpotifyInfo].[dbo].[song] (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	spotify_id VARCHAR(100) NOT NULL UNIQUE,
+	spotify_id VARCHAR(100) PRIMARY KEY,
 	name VARCHAR(100),
 	album VARCHAR(100),
 	album_url VARCHAR(60),
@@ -33,6 +32,6 @@ CREATE TABLE [SpotifyInfo].[dbo].[song] (
 
 CREATE TABLE [SpotifyInfo].[dbo].[aggregate_playlist_songs] (
 	id INT IDENTITY(1,1) PRIMARY KEY,
-	aggregate_playlist_id INT FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[aggregate_playlist](Id),
-	songs_id INT FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[song] (Id)
+	aggregate_playlist_spotify_id VARCHAR(100) FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[aggregate_playlist](spotify_id),
+	songs_id VARCHAR(100) FOREIGN KEY REFERENCES [SpotifyInfo].[dbo].[song] (spotify_id)
 );

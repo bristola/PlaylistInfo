@@ -19,8 +19,7 @@ import domain.StringListConverter;
 public class Song {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String spotifyId;
 
     @Convert(converter = StringListConverter.class)
     private List<String> artists;
@@ -29,7 +28,6 @@ public class Song {
     private List<String> genres;
 
     private String name;
-    private String spotifyId;
     private String album;
     private String albumUrl;
     private String albumCoverUrl;
@@ -37,4 +35,16 @@ public class Song {
     private Boolean explicit;
     private Integer popularity;
     private Integer duration;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Song)) {
+            return false;
+        }
+        Song a = (Song) o;
+        return a.getSpotifyId() == this.getSpotifyId();
+    }
 }

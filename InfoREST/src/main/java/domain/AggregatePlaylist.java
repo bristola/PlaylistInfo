@@ -20,19 +20,30 @@ import domain.Song;
 public class AggregatePlaylist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private String spotifyId;
 
     @ManyToMany(cascade=CascadeType.ALL)
     private List<Song> songs;
 
+    private String currentUsername;
     private String name;
     private String description;
-    private String spotifyId;
     private String createdBy;
     private String spotifyUrl;
     private String imageUrl;
     private Integer followers;
     private Boolean isCollaborative;
     private Boolean isPublic;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof AggregatePlaylist)) {
+            return false;
+        }
+        AggregatePlaylist a = (AggregatePlaylist) o;
+        return a.getSpotifyId() == this.getSpotifyId();
+    }
 }

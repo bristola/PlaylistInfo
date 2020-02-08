@@ -26,4 +26,22 @@ public class SimplePlaylistMapper {
         return simplePlaylist;
     }
 
+    public static SimplePlaylist map(AggregatePlaylist playlist) {
+        SimplePlaylist simplePlaylist = new SimplePlaylist();
+
+        simplePlaylist.setId(playlist.getId());
+        simplePlaylist.setName(playlist.getName());
+        simplePlaylist.setCreatedBy(playlist.getOwner()
+                                            .getDisplayName());
+        simplePlaylist.setSpotifyUrl(playlist.getExternalUrls()
+                                             .getExternalUrls()
+                                             .get(Constants.IMAGE_KEY));
+        simplePlaylist.setImageUrl(playlist.getImages()[0]
+                                           .getUrl());
+        simplePlaylist.setIsCollaborative(playlist.getIsCollaborative());
+        simplePlaylist.setIsPublic(playlist.getIsPublicAccess());
+
+        return simplePlaylist;
+    }
+
 }

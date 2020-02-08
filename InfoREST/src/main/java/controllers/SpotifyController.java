@@ -51,8 +51,8 @@ public class SpotifyController {
 
     @PostMapping(value = "/playlistinfo/{playlistId}")
     public void generatePlaylistInfo(@PathVariable("playlistId") String playlistId,
-                             @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
-                             @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
+                                     @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
+                                     @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
         AggregatePlaylist aggregatedPlaylist = _spotifyService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
         _aggregatePlaylistRepo.save(aggregatedPlaylist);
     }
@@ -61,6 +61,4 @@ public class SpotifyController {
     public AggregatePlaylist getPlaylistInfo(@PathVariable("playlistId") String playlistId) {
         return _aggregatePlaylistRepo.findBySpotifyId(playlistId);
     }
-
-    @PutMapping(value = "/playlistinfo/{playlistId}")
 }

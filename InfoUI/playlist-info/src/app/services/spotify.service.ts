@@ -43,10 +43,10 @@ export class SpotifyService {
   }
 
   generateInfo(playlistId: string): Observable<any> {
-    return this._httpClient.post(`${this.API_URL}/generateplaylistinfo/${playlistId}`, null);
+    return this._httpClient.post(`${this.API_URL}/playlistinfo/${playlistId}`, null);
   }
 
   getPlaylistInfo(playlistId: string): Observable<any> {
-    return this._httpClient.get(`${this.API_URL}/getplaylistinfo/${playlistId}`);
+    return this._httpClient.get(`${this.API_URL}/playlistinfo/${playlistId}`);
   }
 }
