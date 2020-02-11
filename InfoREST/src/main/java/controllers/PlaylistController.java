@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
-import services.SpotifyService;
+import services.PlaylistService;
 import constants.Constants;
 import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
@@ -26,55 +27,34 @@ import domain.SimplePlaylistMapper;
 import repos.AggregatePlaylistRepo;
 
 @RestController
-public class SpotifyController {
+@RequestMapping("playlists")
+public class PlaylistController {
 
     @Autowired
-    private SpotifyService _spotifyService;
+    private PlaylistService _playlistService;
 
-    @Autowired
-    private AggregatePlaylistRepo _aggregatePlaylistRepo;
-
-    @Autowired
-    private SimplePlaylistMapper simplePlaylistMapper;
-
-    @GetMapping(value = "/signinuri")
-    public String getSigninUri() throws IOException, SpotifyWebApiException {
-        return _spotifyService.getSigninUri();
-    }
-
-    @GetMapping(value = "/authorize")
-    public AuthorizeResponse authorizeUser(@RequestHeader(Constants.CODE_HEADER) String code) throws IOException, SpotifyWebApiException {
-        return _spotifyService.authorizeUser(code);
-    }
-
-    @GetMapping(value = "/playlists/{page}")
+    @GetMapping(value = "/spotify/{page}")
     public List<SimplePlaylist> getPlaylists(@PathVariable("page") int page,
                                              @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                                              @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
-        return _spotifyService.getUserPlaylists(accessToken, refreshToken, page);
+        return _playlistService.getUserPlaylists(accessToken, refreshToken, page);
     }
 
-    @PostMapping(value = "/playlistinfo/{playlistId}")
+    @PostMapping(value = "/info/{playlistId}")
     public void generatePlaylistInfo(@PathVariable("playlistId") String playlistId,
                                      @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                                      @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        AggregatePlaylist aggregatePlaylist = _spotifyService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
-        _aggregatePlaylistRepo.save(aggregatePlaylist);
+        _playlistService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
     }
 
-    @GetMapping(value = "/playlistinfo/{playlistId}")
+    @GetMapping(value = "/info/{playlistId}")
     public AggregatePlaylist getPlaylistInfo(@PathVariable("playlistId") String playlistId) {
-        return _aggregatePlaylistRepo.findBySpotifyId(playlistId);
+        return _playlistService.getPlaylistInfo(playlistId);
     }
 
-    @GetMapping(value = "/existingplaylists")
+    @GetMapping(value = "/existing")
     public List<SimplePlaylist> getExistingPlaylists(@RequestHeader(Constants.ACCESS_HEADER) String accessToken,
                                                      @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        String username = _spotifyService.getUsername(accessToken, refreshToken);
-        List<AggregatePlaylist> aggregatePlaylists = _aggregatePlaylistRepo.findByCurrentUsername(username);
-        List<SimplePlaylist> simplePlaylists = aggregatePlaylists.stream()
-                                                                 .map(a -> SimplePlaylistMapper.map(a))
-                                                                 .collect(Collectors.toList());
-        return simplePlaylists;
+        return _playlistService.getExistingPlaylists(accessToken, refreshToken);
     }
 }

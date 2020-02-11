@@ -30,27 +30,27 @@ export class SpotifyService {
   }
 
   getSigninURI(): Observable<string> {
-    return this._httpClient.get(`${this.API_URL}/signinuri`, {responseType: 'text'});
+    return this._httpClient.get(`${this.API_URL}/authorization/signinuri`, {responseType: 'text'});
   }
 
   authorize(code: string): Observable<IAuthorizeResponse> {
     const headers = new HttpHeaders().append(HEADERS.CODE, code);
-    return this._httpClient.get<IAuthorizeResponse>(`${this.API_URL}/authorize`, {headers: headers});
+    return this._httpClient.get<IAuthorizeResponse>(`${this.API_URL}/authorization/access`, {headers: headers});
   }
 
   getUserPlaylists(page: number): Observable<ISimplePlaylist[]> {
-    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/playlists/${page}`);
+    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/playlists/spotify/${page}`);
   }
 
   generateInfo(playlistId: string): Observable<any> {
-    return this._httpClient.post(`${this.API_URL}/playlistinfo/${playlistId}`, null);
+    return this._httpClient.post(`${this.API_URL}/playlists/info/${playlistId}`, null);
   }
 
   getPlaylistInfo(playlistId: string): Observable<any> {
-    return this._httpClient.get(`${this.API_URL}/playlistinfo/${playlistId}`);
+    return this._httpClient.get(`${this.API_URL}/playlists/info/${playlistId}`);
   }
 
   getExistingUserPlaylists(): Observable<ISimplePlaylist[]> {
-    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/existingplaylists`);
+    return this._httpClient.get<ISimplePlaylist[]>(`${this.API_URL}/playlists/existing`);
   }
 }

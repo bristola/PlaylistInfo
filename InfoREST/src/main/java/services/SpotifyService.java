@@ -54,6 +54,11 @@ public class SpotifyService {
     @Autowired
     private AggregatePlaylistMapper aggregatePlaylistMapper;
 
+    /**
+    * Gets a link to a spotify page for the user to sign into.
+    *
+    * @return URI to signin page
+    */
     public String getSigninUri() throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAPI();
@@ -69,6 +74,12 @@ public class SpotifyService {
 
     }
 
+    /**
+    * Authorizes the user to Spotify using returned code from redirect.
+    *
+    * @param code from Spotify redirect
+    * @return Authorize object containing signin information.
+    */
     public AuthorizeResponse authorizeUser(String code) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAPI();
@@ -85,7 +96,7 @@ public class SpotifyService {
 
         return response;
     }
-
+    
     public List<SimplePlaylist> getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
