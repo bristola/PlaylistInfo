@@ -20,7 +20,6 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import services.SpotifyService;
 import constants.Constants;
-import domain.AuthorizeResponse;
 
 @RestController
 @RequestMapping("authorization")
@@ -35,7 +34,7 @@ public class AuthorizationController {
     }
 
     @GetMapping(value = "/access")
-    public AuthorizeResponse authorizeUser(@RequestHeader(Constants.CODE_HEADER) String code) throws IOException, SpotifyWebApiException {
+    public String authorizeUser(@RequestHeader(Constants.CODE_HEADER) String code) throws IOException, SpotifyWebApiException {
         return _spotifyService.authorizeUser(code);
     }
 

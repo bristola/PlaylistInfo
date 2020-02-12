@@ -1,8 +1,3 @@
-export interface IAuthorizeResponse {
-    accessToken: string;
-    refreshToken: string;
-}
-
 export interface ISimplePlaylist {
     name: string;
     createdBy: string;

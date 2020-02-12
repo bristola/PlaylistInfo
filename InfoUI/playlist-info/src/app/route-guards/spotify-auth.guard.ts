@@ -12,14 +12,14 @@ export class SpotifyAuthGuard implements CanActivate {
   constructor(private _spotifyService: SpotifyService) { }
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-    if (this._spotifyService.getAuthorizationData()) {
+    if (this._spotifyService.getAccessToken()) {
       return of(true);
     }
     if (route.queryParams.code) {
       return this._spotifyService.authorize(route.queryParams.code).pipe(
         map(response => {
           if (response) {
-            this._spotifyService.setAuthorizationData(response);
+            this._spotifyService.setAccessToken(response);
             return true;
           } else {
             return false;

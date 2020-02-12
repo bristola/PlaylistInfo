@@ -20,7 +20,6 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
 import services.PlaylistService;
 import constants.Constants;
-import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
 import domain.SimplePlaylistMapper;
@@ -35,16 +34,14 @@ public class PlaylistController {
 
     @GetMapping(value = "/spotify/{page}")
     public List<SimplePlaylist> getPlaylists(@PathVariable("page") int page,
-                                             @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
-                                             @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws IOException, SpotifyWebApiException {
-        return _playlistService.getUserPlaylists(accessToken, refreshToken, page);
+                                             @RequestHeader(Constants.ACCESS_HEADER) String accessToken) throws IOException, SpotifyWebApiException {
+        return _playlistService.getUserPlaylists(accessToken, page);
     }
 
     @PostMapping(value = "/info/{playlistId}")
     public void generatePlaylistInfo(@PathVariable("playlistId") String playlistId,
-                                     @RequestHeader(Constants.ACCESS_HEADER) String accessToken,
-                                     @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        _playlistService.generatePlaylistInfo(accessToken, refreshToken, playlistId);
+                                     @RequestHeader(Constants.ACCESS_HEADER) String accessToken) throws InterruptedException, IOException, SpotifyWebApiException {
+        _playlistService.generatePlaylistInfo(accessToken, playlistId);
     }
 
     @GetMapping(value = "/info/{playlistId}")
@@ -53,8 +50,7 @@ public class PlaylistController {
     }
 
     @GetMapping(value = "/existing")
-    public List<SimplePlaylist> getExistingPlaylists(@RequestHeader(Constants.ACCESS_HEADER) String accessToken,
-                                                     @RequestHeader(Constants.REFRESH_HEADER) String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        return _playlistService.getExistingPlaylists(accessToken, refreshToken);
+    public List<SimplePlaylist> getExistingPlaylists(@RequestHeader(Constants.ACCESS_HEADER) String accessToken) throws InterruptedException, IOException, SpotifyWebApiException {
+        return _playlistService.getExistingPlaylists(accessToken);
     }
 }

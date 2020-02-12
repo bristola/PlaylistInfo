@@ -12,12 +12,11 @@ export class SpotifyAuthInterceptor implements HttpInterceptor {
     constructor(private _spotifyService: SpotifyService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const authData = this._spotifyService.getAuthorizationData();
+        const accessToken = this._spotifyService.getAccessToken();
         let headers = req.headers;
 
-        if (authData) {
-            headers = headers.append(HEADERS.ACCESS, authData.accessToken)
-                             .append(HEADERS.REFRESH, authData.refreshToken);
+        if (accessToken) {
+            headers = headers.append(HEADERS.ACCESS, accessToken);
         }
 
         const outReq = req.clone({headers: headers});

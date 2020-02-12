@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { HEADERS } from '../constants/constants';
-import { IAuthorizeResponse, ISimplePlaylist } from '../interfaces/interfaces';
+import { ISimplePlaylist } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -11,31 +11,26 @@ import { IAuthorizeResponse, ISimplePlaylist } from '../interfaces/interfaces';
 export class SpotifyService {
 
   API_URL: string = environment.API_URL;
-  authData: IAuthorizeResponse;
 
   constructor(private _httpClient: HttpClient) { }
 
-  setAuthorizationData(authData: IAuthorizeResponse): void {
-    sessionStorage.setItem('accessToken', authData.accessToken);
-    sessionStorage.setItem('refreshToken', authData.refreshToken);
+  setAccessToken(accessToken: string): void {
+    sessionStorage.setItem('accessToken', accessToken);
   }
 
-  getAuthorizationData(): IAuthorizeResponse {
+  getAccessToken(): string {
     const accessToken = sessionStorage.getItem('accessToken');
-    const refreshToken = sessionStorage.getItem('refreshToken');
-    
-    return !accessToken && !refreshToken ?
-      null :
-      { accessToken: accessToken, refreshToken: refreshToken };
+
+    return accessToken;
   }
 
   getSigninURI(): Observable<string> {
     return this._httpClient.get(`${this.API_URL}/authorization/signinuri`, {responseType: 'text'});
   }
 
-  authorize(code: string): Observable<IAuthorizeResponse> {
+  authorize(code: string): Observable<string> {
     const headers = new HttpHeaders().append(HEADERS.CODE, code);
-    return this._httpClient.get<IAuthorizeResponse>(`${this.API_URL}/authorization/access`, {headers: headers});
+    return this._httpClient.get(`${this.API_URL}/authorization/access`, {headers: headers, responseType: 'text'});
   }
 
   getUserPlaylists(page: number): Observable<ISimplePlaylist[]> {

@@ -10,10 +10,7 @@ import { Location } from '@angular/common';
 })
 export class PlaylistsComponent implements OnInit {
 
-  code: string;
   playlists = [];
-  accessToken: string;
-  refreshToken: string;
   page: number = 0;
   perPage: number = 20;
   loadMoreFlag: boolean = true;

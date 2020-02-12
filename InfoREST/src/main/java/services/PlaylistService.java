@@ -14,7 +14,6 @@ import com.wrapper.spotify.model_objects.specification.Artist;
 
 import services.SpotifyService;
 import constants.Constants;
-import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
 import domain.SimplePlaylistMapper;
@@ -36,8 +35,8 @@ public class PlaylistService {
     @Autowired
     private AggregatePlaylistMapper aggregatePlaylistMapper;
 
-    public List<SimplePlaylist> getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
-        List<PlaylistSimplified> playlists = _spotifyService.getUserPlaylists(accessToken, refreshToken, page);
+    public List<SimplePlaylist> getUserPlaylists(String accessToken, int page) throws IOException, SpotifyWebApiException {
+        List<PlaylistSimplified> playlists = _spotifyService.getUserPlaylists(accessToken, page);
 
         List<SimplePlaylist> simplePlaylists = playlists.stream()
                                                         .map(p -> SimplePlaylistMapper.map(p))
@@ -46,19 +45,19 @@ public class PlaylistService {
         return simplePlaylists;
     }
 
-    public void generatePlaylistInfo(String accessToken, String refreshToken, String playlistId) throws InterruptedException, IOException, SpotifyWebApiException {
-        Playlist playlist = _spotifyService.getPlaylist(accessToken, refreshToken, playlistId);
+    public void generatePlaylistInfo(String accessToken, String playlistId) throws InterruptedException, IOException, SpotifyWebApiException {
+        Playlist playlist = _spotifyService.getPlaylist(accessToken, playlistId);
 
-        List<PlaylistTrack> tracks = _spotifyService.getPlaylistTracks(accessToken, refreshToken, playlistId);
+        List<PlaylistTrack> tracks = _spotifyService.getPlaylistTracks(accessToken, playlistId);
 
         List<String> artistIds = tracks.stream()
                                        .flatMap(t -> Arrays.asList(t.getTrack().getArtists()).stream().map(a -> a.getId()))
                                        .distinct()
                                        .collect(Collectors.toList());
 
-        List<Artist> artists = _spotifyService.getArtists(accessToken, refreshToken, artistIds);
+        List<Artist> artists = _spotifyService.getArtists(accessToken, artistIds);
 
-        String currentUser = _spotifyService.getUsername(accessToken, refreshToken);
+        String currentUser = _spotifyService.getUsername(accessToken);
 
         AggregatePlaylist aggregatePlaylist = AggregatePlaylistMapper.map(playlist, tracks, artists, currentUser);
 
@@ -69,8 +68,8 @@ public class PlaylistService {
         return _aggregatePlaylistRepo.findBySpotifyId(playlistId);
     }
 
-    public List<SimplePlaylist> getExistingPlaylists(String accessToken, String refreshToken) throws InterruptedException, IOException, SpotifyWebApiException {
-        String username = _spotifyService.getUsername(accessToken, refreshToken);
+    public List<SimplePlaylist> getExistingPlaylists(String accessToken) throws InterruptedException, IOException, SpotifyWebApiException {
+        String username = _spotifyService.getUsername(accessToken);
         List<AggregatePlaylist> aggregatePlaylists = _aggregatePlaylistRepo.findByCurrentUsername(username);
         List<SimplePlaylist> simplePlaylists = aggregatePlaylists.stream()
                                                                  .map(a -> SimplePlaylistMapper.map(a))

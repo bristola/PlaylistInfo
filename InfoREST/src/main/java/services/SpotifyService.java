@@ -30,7 +30,6 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.google.common.collect.Lists;
 
 import constants.Constants;
-import domain.AuthorizeResponse;
 import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
 import domain.SimplePlaylistMapper;
@@ -80,7 +79,7 @@ public class SpotifyService {
     * @param code from Spotify redirect
     * @return Authorize object containing signin information.
     */
-    public AuthorizeResponse authorizeUser(String code) throws IOException, SpotifyWebApiException {
+    public String authorizeUser(String code) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = this.getAPI();
 
@@ -90,16 +89,13 @@ public class SpotifyService {
         AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 
         String accessToken = authorizationCodeCredentials.getAccessToken();
-        String refreshToken = authorizationCodeCredentials.getRefreshToken();
 
-        AuthorizeResponse response = new AuthorizeResponse(accessToken, refreshToken);
-
-        return response;
+        return accessToken;
     }
 
-    public List<PlaylistSimplified> getUserPlaylists(String accessToken, String refreshToken, int page) throws IOException, SpotifyWebApiException {
+    public List<PlaylistSimplified> getUserPlaylists(String accessToken, int page) throws IOException, SpotifyWebApiException {
 
-        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+        SpotifyApi api = this.getAuthorizedAPI(accessToken);
 
         GetListOfCurrentUsersPlaylistsRequest getListOfUsersPlaylistsRequest = api.getListOfCurrentUsersPlaylists()
                                                                                   .limit(Constants.PLAYLIST_NUM)
@@ -115,8 +111,8 @@ public class SpotifyService {
         return playlists;
     }
 
-    public Playlist getPlaylist(String accessToken, String refreshToken, String playlistId) throws IOException, SpotifyWebApiException {
-        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+    public Playlist getPlaylist(String accessToken, String playlistId) throws IOException, SpotifyWebApiException {
+        SpotifyApi api = this.getAuthorizedAPI(accessToken);
 
         GetPlaylistRequest getPlaylistRequest = api.getPlaylist(playlistId)
                                                    .build();
@@ -126,8 +122,8 @@ public class SpotifyService {
         return playlist;
     }
 
-    public String getUsername(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
-        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+    public String getUsername(String accessToken) throws IOException, SpotifyWebApiException {
+        SpotifyApi api = this.getAuthorizedAPI(accessToken);
 
         GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = api.getCurrentUsersProfile()
                                                                          .build();
@@ -137,8 +133,8 @@ public class SpotifyService {
         return user.getDisplayName();
     }
 
-    public List<PlaylistTrack> getPlaylistTracks(String accessToken, String refreshToken, String playlistId) throws InterruptedException, IOException, SpotifyWebApiException {
-        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+    public List<PlaylistTrack> getPlaylistTracks(String accessToken, String playlistId) throws InterruptedException, IOException, SpotifyWebApiException {
+        SpotifyApi api = this.getAuthorizedAPI(accessToken);
 
         int page = 0;
         List<PlaylistTrack> allTracks = new ArrayList<PlaylistTrack>();
@@ -164,8 +160,8 @@ public class SpotifyService {
         return allTracks;
     }
 
-    public List<Artist> getArtists(String accessToken, String refreshToken, List<String> ids) throws InterruptedException, IOException, SpotifyWebApiException {
-        SpotifyApi api = this.getAuthorizedAPI(accessToken, refreshToken);
+    public List<Artist> getArtists(String accessToken, List<String> ids) throws InterruptedException, IOException, SpotifyWebApiException {
+        SpotifyApi api = this.getAuthorizedAPI(accessToken);
 
         int page = 0;
         List<Artist> allArtists = new ArrayList<Artist>();
@@ -202,11 +198,10 @@ public class SpotifyService {
         return api;
     }
 
-    private SpotifyApi getAuthorizedAPI(String accessToken, String refreshToken) throws IOException, SpotifyWebApiException {
+    private SpotifyApi getAuthorizedAPI(String accessToken) throws IOException, SpotifyWebApiException {
 
         SpotifyApi api = new SpotifyApi.Builder()
                                        .setAccessToken(accessToken)
-                                       .setRefreshToken(refreshToken)
                                        .build();
 
        return api;
