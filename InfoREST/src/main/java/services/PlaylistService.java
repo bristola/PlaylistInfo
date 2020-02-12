@@ -1,24 +1,24 @@
 package services;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.Playlist;
+import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
+import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.specification.Playlist;
-import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
-import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
-import com.wrapper.spotify.model_objects.specification.Artist;
 
-import services.SpotifyService;
 import constants.Constants;
-import domain.SimplePlaylist;
 import domain.AggregatePlaylist;
-import domain.SimplePlaylistMapper;
 import domain.AggregatePlaylistMapper;
+import domain.SimplePlaylist;
+import domain.SimplePlaylistMapper;
 import repos.AggregatePlaylistRepo;
+import services.SpotifyService;
 
 @Service
 public class PlaylistService {
