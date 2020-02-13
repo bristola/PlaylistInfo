@@ -5,6 +5,38 @@
         </mat-card-header>
         <mat-card-content>
             <mat-accordion>
+                <mat-expansion-panel *ngFor="let playlist of existingPlaylists">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img class="image-small" [src]="playlist.imageUrl" alt="Album Cover List">
+                            <div class="playlist-name">{{playlist.name}}</div>
+                            <div class="previously-generated">Previously Generated</div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <img mat-card-image [src]="playlist.imageUrl" alt="Album Cover">
+                        <br>
+                        <b>Author</b>
+                        <br>
+                        {{playlist.createdBy}}
+                        <br>
+                        <mat-icon matTooltip="Playlist is Public" *ngIf="playlist.isPublic">public</mat-icon>
+                        <mat-icon matTooltip="Playlist is Private" *ngIf="!playlist.isPublic">visibility_off</mat-icon>
+                        <mat-icon matTooltip="Playlist is Collaborative" *ngIf="playlist.isCollaborative">people</mat-icon>
+                        <mat-icon matTooltip="Playlist is not Collaborative" *ngIf="!playlist.isCollaborative">person</mat-icon>
+                        <mat-action-row>
+                            <a [href]="playlist.spotifyUrl">
+                                <button mat-button class="spotify-button">Spotify</button>
+                            </a>
+                            <button mat-button
+                                    class="info-button"
+                                    [routerLink]="['/playlist', playlist.id]">View</button>
+                            <button mat-button
+                                    class="info-button"
+                                    (click)="generateInfo(playlist.id)">Regenerate</button>
+                        </mat-action-row>
+                    </ng-template>
+                </mat-expansion-panel>
                 <mat-expansion-panel *ngFor="let playlist of playlists">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
@@ -25,7 +57,7 @@
                         <mat-icon matTooltip="Playlist is not Collaborative" *ngIf="!playlist.isCollaborative">person</mat-icon>
                         <mat-action-row>
                             <a [href]="playlist.spotifyUrl">
-                                <button mat-button class="spotify-button">View on Spotify</button>
+                                <button mat-button class="spotify-button">Spotify</button>
                             </a>
                             <button mat-button
                                     class="info-button"

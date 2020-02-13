@@ -48,6 +48,21 @@
             align-items: center;
         }
 
+        .playlist-name {
+            float: left;
+            text-align: left;
+        }
+
+        .previously-generated {
+            position: absolute;
+            right: 60px;
+            font-size: 10px;
+            color: white;
+            background-color: #33779e;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
         .image-small {
             width: 35px;
             margin-right: 15px;

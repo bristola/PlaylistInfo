@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { concatMap, map, tap, filter } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-playlists',
@@ -11,6 +13,7 @@ import { Location } from '@angular/common';
 export class PlaylistsComponent implements OnInit {
 
   playlists = [];
+  existingPlaylists = []
   page: number = 0;
   perPage: number = 20;
   loadMoreFlag: boolean = true;
@@ -22,7 +25,6 @@ export class PlaylistsComponent implements OnInit {
   ngOnInit() {
     this._location.replaceState('playlists');
     this._getUserPlaylists(this.page);
-    this._spotifyService.getExistingUserPlaylists().subscribe();
   }
 
   ///////////////////////////////////////////
@@ -45,13 +47,27 @@ export class PlaylistsComponent implements OnInit {
   //////////////////////////////////////////
 
   private _getUserPlaylists(page: number) {
-    this._spotifyService.getUserPlaylists(page)
-      .subscribe(playlists => {
-        if (playlists.length != this.perPage) {
-          this.loadMoreFlag = false;
-        }
-        this.playlists = this.playlists.concat(playlists);
-      });
+    this._spotifyService.getExistingUserPlaylists().pipe(
+      tap(existingPlaylists => {
+        this.existingPlaylists = existingPlaylists;
+      }),
+      concatMap(existingPlaylists => 
+        this._spotifyService.getUserPlaylists(page).pipe(
+            tap(playlists => {
+              if (playlists.length != this.perPage) {
+                this.loadMoreFlag = false;
+              }
+            }),
+            map(playlists =>
+              playlists.filter(playlist => 
+                !existingPlaylists.map(p => p.id).includes(playlist.id)
+              )
+            )
+          )
+      )
+    ).subscribe(playlists => {
+      this.playlists = this.playlists.concat(playlists);
+    });
   }
 
   private _generateInfo(playlistID: string) {
