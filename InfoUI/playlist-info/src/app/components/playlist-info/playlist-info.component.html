@@ -1,3 +1,52 @@
-<div *ngIf="(playlistInfo$ | async) as playlistInfo">
-    <div>{{playlistInfo?.name}}</div>
+<div class="container">
+  <div class="info-container" *ngIf="playlist">
+    <div class="row">
+      <mat-card class="col-sm">
+        <mat-card-header>
+          <mat-card-title>{{playlist.name}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image class="playlist-cover" [src]="playlist.imageUrl" alt="Album Cover">
+        <mat-card-content>
+          Created by <i>{{playlist.createdBy}}</i>
+        </mat-card-content>
+        <mat-card-actions>
+          <a [href]="playlist.spotifyUrl">
+            <button mat-button class="spotify-button">View on Spotify</button>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+      <mat-card class="col-sm">
+        <mat-card-header>
+          <mat-card-title>Songs</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="song-container">
+          <mat-list>
+            <mat-list-item *ngFor="let song of playlist.songs">
+              <img class="song-image" [src]="song.albumCoverUrl">
+              <div>
+                {{song.name}} <span class="author">by {{song.artists.join(', ')}}</span>
+              </div>
+              <mat-divider></mat-divider>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="row">
+      <mat-card class="col-sm">
+        Test1
+      </mat-card>
+      <mat-card class="col-sm">
+        Test2
+      </mat-card>
+    </div>
+    <div class="row">
+      <mat-card class="col-sm">
+          Test1
+      </mat-card>
+      <mat-card class="col-sm">
+          Test2
+      </mat-card>
+    </div>
+  </div>
 </div>

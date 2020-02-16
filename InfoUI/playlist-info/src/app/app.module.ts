@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
@@ -43,7 +44,8 @@ import { PlaylistInfoComponent } from './components/playlist-info/playlist-info.
     MatRippleModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatTooltipModule 
+    MatTooltipModule,
+    MatListModule
   ],
   providers: [
     {

@@ -1,0 +1,37 @@
+.info-container {
+    max-width: 1000px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+
+    mat-card {
+        margin: 15px;
+        max-height: 600px;
+
+        .playlist-cover {
+            margin: 10px;
+            width: 90%;
+        }
+
+        .spotify-button {
+            background-color: #1DB954;
+            color: white;
+        }
+
+        .song-container {
+            overflow-y: scroll;
+            height: 90%;
+
+            .author {
+                font-size: x-small;
+                color: #9e9e9e;
+            }
+
+            .song-image {
+                display: inline-block;
+                width: 25px;
+                margin-right: 5px;
+            }
+        }
+    }
+}

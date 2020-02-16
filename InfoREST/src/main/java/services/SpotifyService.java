@@ -51,7 +51,7 @@ public class SpotifyService {
 
         AuthorizationCodeUriRequest authorizationCodeUriRequest = api.authorizationCodeUri()
                                                                      .scope(Constants.SCOPES)
-                                                                     .show_dialog(false)
+                                                                     .show_dialog(true)
                                                                      .build();
 
         URI uri = authorizationCodeUriRequest.execute();
