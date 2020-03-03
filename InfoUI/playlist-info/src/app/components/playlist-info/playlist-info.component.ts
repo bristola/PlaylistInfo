@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from 'src/app/services/spotify.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { BROAD_GENRES } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-playlist-info',
@@ -13,6 +14,12 @@ export class PlaylistInfoComponent implements OnInit {
   playlist: any;
   genres: Map<string, number>;
   songLength: any;
+  maxGenres: number = 15;
+  pieOptions = {
+    pieHole: 0.4,
+    legend: 'none',
+    pieSliceText: 'label'
+  }
 
   constructor(private _spotifyService: SpotifyService,
               private _route: ActivatedRoute) { }
@@ -39,14 +46,15 @@ export class PlaylistInfoComponent implements OnInit {
 
   private getGenres(info): void {
     this.genres = new Map<string, number>();
+    BROAD_GENRES.forEach(genre => this.genres.set(genre, 0));
     const songs = info.songs;
     songs.forEach(song => {
       song.genres.forEach(genre => {
-        if (this.genres.has(genre)) {
-          this.genres.set(genre, this.genres.get(genre) + 1);
-        } else {
-          this.genres.set(genre, 1);
-        }
+        this.genres.forEach((value, key) => {
+          if (genre.includes(key)) {
+            this.genres.set(key, value + 1);
+          }
+        });
       });
     });
   }

@@ -21,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SpotifyAuthInterceptor } from './interceptors/spotify-auth.interceptor';
 import { PlaylistInfoComponent } from './components/playlist-info/playlist-info.component';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PlaylistInfoComponent } from './components/playlist-info/playlist-info.
     MatProgressSpinnerModule,
     MatIconModule,
     MatTooltipModule,
-    MatListModule
+    MatListModule,
+    GoogleChartsModule
   ],
   providers: [
     {

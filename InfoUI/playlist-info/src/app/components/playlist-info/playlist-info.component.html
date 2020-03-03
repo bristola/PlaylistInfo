@@ -34,19 +34,28 @@
     </div>
     <div class="row">
       <mat-card class="col-sm">
-        Test1
+        <google-chart #chart
+                      [title]="'Genres'"
+                      [type]="'PieChart'"
+                      [data]="genres"
+                      [columnNames]="['Genre', 'Percentage']"
+                      [width]="550"
+                      [height]="300"
+                      [options]="pieOptions">
+        </google-chart>
       </mat-card>
       <mat-card class="col-sm">
-        Test2
+        <h3 class="middle">The average length of a song is {{songLength}}</h3>
+        <mat-icon class="timer">timer</mat-icon>
       </mat-card>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <mat-card class="col-sm">
           Test1
       </mat-card>
       <mat-card class="col-sm">
           Test2
       </mat-card>
-    </div>
+    </div> -->
   </div>
 </div>

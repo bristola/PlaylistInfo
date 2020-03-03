@@ -18,6 +18,18 @@
             color: white;
         }
 
+        .middle {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .timer {
+            font-size: 150px;
+            text-align: center;
+            margin-right: 120px;
+            margin-top: 30px;
+        }
+
         .song-container {
             overflow-y: scroll;
             height: 90%;
