@@ -58,7 +58,15 @@
         </div>
       </mat-card>
       <mat-card class="col-sm">
-          Test2
+        <div class="timeline-container">
+          <h3 class="middle">The average song release year is <b>{{songYear}}</b></h3>
+          <google-chart #chart
+                        [title]="'Release Dates'"
+                        [type]="'Timeline'"
+                        [data]="dates"
+                        [height]="400"
+                        [options]="dateOptions"></google-chart>
+        </div>
       </mat-card>
     </div>
   </div>

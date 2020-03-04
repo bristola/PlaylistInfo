@@ -13,13 +13,18 @@ export class PlaylistInfoComponent implements OnInit {
 
   playlist: any;
   genres: Map<string, number>;
+  dates: any;
   songLength: any;
   songPopularity: any;
+  songYear: any;
   maxGenres: number = 15;
   pieOptions = {
     pieHole: 0.4,
     legend: 'none',
     pieSliceText: 'label'
+  }
+  dateOptions = {
+    timeline: { showRowLabels: false }
   }
 
   constructor(private _spotifyService: SpotifyService,
@@ -43,14 +48,14 @@ export class PlaylistInfoComponent implements OnInit {
       this.getGenres(info);
       this.getSongLength(info);
       this.getPopularity(info);
+      this.getReleaseDates(info);
     });
   }
 
   private getGenres(info): void {
     this.genres = new Map<string, number>();
     BROAD_GENRES.forEach(genre => this.genres.set(genre, 0));
-    const songs = info.songs;
-    songs.forEach(song => {
+    info.songs.forEach(song => {
       song.genres.forEach(genre => {
         this.genres.forEach((value, key) => {
           if (genre.includes(key)) {
@@ -71,5 +76,16 @@ export class PlaylistInfoComponent implements OnInit {
     const lengths: number[] = info.songs.map(song => song.popularity);
     const total = lengths.reduce((sum, current) => sum + current, 0);
     this.songPopularity = (total / lengths.length);
+  }
+
+  private getReleaseDates(info): void {
+    this.dates = [];
+    let yearSum = 0;
+    info.songs.forEach(song => {
+      const songDate = new Date(song.releaseDate);
+      this.dates.push(['Release Date', song.name, songDate, songDate]);
+      yearSum += songDate.getFullYear();
+    });
+    this.songYear = Math.round(yearSum / info.songs.length);
   }
 }

@@ -29,6 +29,21 @@
             vertical-align: middle;
         }
 
+        .timeline-container {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 100px;
+
+            google-chart {
+                position: absolute;
+                align-items: center;
+                justify-content: center;
+                top: 175px;
+            }
+        }
+
         .stat-container {
 
             .mat-icon {
