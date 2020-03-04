@@ -39,23 +39,27 @@
                       [type]="'PieChart'"
                       [data]="genres"
                       [columnNames]="['Genre', 'Percentage']"
-                      [width]="550"
-                      [height]="300"
+                      [height]="400"
                       [options]="pieOptions">
         </google-chart>
       </mat-card>
       <mat-card class="col-sm">
-        <h3 class="middle">The average length of a song is {{songLength}}</h3>
-        <mat-icon class="timer">timer</mat-icon>
+        <div class="stat-container">
+          <h3 class="middle">The average length of a song is <b>{{songLength | number:'0.2-4'}}</b> seconds</h3>
+          <mat-icon class="stat-icon">timer</mat-icon>
+        </div>
       </mat-card>
     </div>
-    <!-- <div class="row">
+    <div class="row">
       <mat-card class="col-sm">
-          Test1
+        <div class="stat-container">
+          <h3 class="middle">The average popularity of a song is <b>{{songPopularity | number:'0.2'}}</b> out of 100</h3>
+          <mat-icon class="stat-icon">people</mat-icon>
+        </div>
       </mat-card>
       <mat-card class="col-sm">
           Test2
       </mat-card>
-    </div> -->
+    </div>
   </div>
 </div>

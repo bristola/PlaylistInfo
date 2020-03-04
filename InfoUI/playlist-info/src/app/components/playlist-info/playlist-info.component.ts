@@ -14,6 +14,7 @@ export class PlaylistInfoComponent implements OnInit {
   playlist: any;
   genres: Map<string, number>;
   songLength: any;
+  songPopularity: any;
   maxGenres: number = 15;
   pieOptions = {
     pieHole: 0.4,
@@ -41,6 +42,7 @@ export class PlaylistInfoComponent implements OnInit {
       this.playlist = info;
       this.getGenres(info);
       this.getSongLength(info);
+      this.getPopularity(info);
     });
   }
 
@@ -63,5 +65,11 @@ export class PlaylistInfoComponent implements OnInit {
     const lengths: number[] = info.songs.map(song => song.duration);
     const total = lengths.reduce((sum, current) => sum + current, 0);
     this.songLength = (total / lengths.length) / 1000;
+  }
+
+  private getPopularity(info): void {
+    const lengths: number[] = info.songs.map(song => song.popularity);
+    const total = lengths.reduce((sum, current) => sum + current, 0);
+    this.songPopularity = (total / lengths.length);
   }
 }
